@@ -1,0 +1,14 @@
+{% extends 'default.html' %}
+
+
+{% block title %}Создать заметку{% endblock title %}
+
+{% block content %}
+<br>
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <br><input type="submit" value="Добавить заметку">
+</form>
+
+{% endblock %}
