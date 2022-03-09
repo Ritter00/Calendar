@@ -11,6 +11,7 @@ from .models import BaseRegisterForm, Note
 from .forms import NoteForm
 from .utils import Calendar
 
+
 class MyView(TemplateView):
     template_name = 'default.html'
 
@@ -41,20 +42,24 @@ class NoteCreate(LoginRequiredMixin, CreateView):
         note.save()
         return super().form_valid(form)
 
+
 def get_now_date(_day):
     if _day:
         year, month = (int(x) for x in _day.split('-'))
         return date(year, month, day=1)
     return datetime.today()
 
-class CalendarView(ListView):
+
+class CalendarView(LoginRequiredMixin, ListView):
     model = Note
     template_name = 'calendar.html'
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        id_user = self.request.user.id
         date_now = get_now_date(self.request.GET.get('month', None))
-        cal = Calendar(date_now.year, date_now.month)
+        cal = Calendar(date_now.year, date_now.month, id_user)
         cal_html = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(cal_html)
         return context

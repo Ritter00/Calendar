@@ -1,14 +1,16 @@
 from calendar import HTMLCalendar
-from .models import Note
+from .models import Note, User
 
 class Calendar(HTMLCalendar):
-     def __init__(self, year=None, month=None):
+     def __init__(self, year=None, month=None, user_id=None):
          self.year = year
          self.month = month
+         self.user_id = user_id
          super(Calendar, self).__init__()
 
      def formatday(self, day, notes):
-         note_day = notes.filter(start_time__day=day)
+         user = User.objects.get(id=self.user_id)
+         note_day = notes.filter(start_time__day=day, user=user)
          add_html = ''
          for note in note_day:
              add_html += f'<li>{note.get_html()}</li>'
