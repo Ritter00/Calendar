@@ -1,11 +1,10 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView
-from calendar import HTMLCalendar
 from django.utils.safestring import mark_safe
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
+
 
 from .models import BaseRegisterForm, Note
 from .forms import NoteForm
@@ -14,16 +13,6 @@ from .utils import Calendar
 
 class MyView(TemplateView):
     template_name = 'default.html'
-
-
-class MyViewReq(LoginRequiredMixin, TemplateView):
-    template_name = 'req.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        cl = HTMLCalendar(firstweekday=0)
-        context['cal'] = mark_safe(cl.formatmonth(2020, 5))
-        return context
 
 
 class BaseRegisterView(CreateView):
@@ -62,4 +51,17 @@ class CalendarView(LoginRequiredMixin, ListView):
         cal = Calendar(date_now.year, date_now.month, id_user)
         cal_html = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(cal_html)
+        context['name']= User.objects.get(id=id_user)
         return context
+
+
+class NoteDetail(LoginRequiredMixin, DetailView):
+    template_name = 'note_detail.html'
+    model = Note
+
+    def get_queryset(self):
+        user = self.request.user
+        q = super().get_queryset()
+        return q.filter(user=user)
+
+

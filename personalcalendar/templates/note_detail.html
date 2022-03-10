@@ -1,0 +1,21 @@
+{% extends 'default.html' %}
+
+
+{% block title %}Cистем{% endblock title %}
+
+{% block content %}
+<table>
+        <tr>
+            <td>Заголовок</td>
+            <td>Дата публикации</td>
+            <td>Текст</td>
+        </tr>
+
+        <tr>
+                <td>{{ note.title}}</td>
+                <td>{{ note.start_time|date:'d-M-Y'}}</td>
+                <td>{{ note.text }}</td>
+        </tr>
+
+</table>
+{% endblock %}

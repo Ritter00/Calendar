@@ -18,7 +18,7 @@
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="/">Календарь</a>
+                <a class="navbar-brand" href="{% url 'calendar' %}">Календарь</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -36,13 +36,18 @@
         </nav>
         <!-- Page content-->
         <div>
+
         {% block content %}
+            <span>Автор: <a href="https://ritter00.github.io/" target="_blank">Олег Зимноха</a></span>
 
         <div class="container">
             <div class="text-center mt-5">
-                <h1>A Bootstrap 5 Starter Template</h1>
-                <p class="lead">A complete project boilerplate built with Bootstrap</p>
-                <p>Bootstrap v5.1.3</p>
+                <h1>Добро пожаловать, в приложение "Календарь для заметок"</h1>
+                {% if user.is_authenticated %}
+                    <p class="lead">Вы можете <a href="{% url 'note_create' %}">создавать заметки</a> и просмaтривать их в <a href="{% url 'calendar' %}">календаре</a></p>
+                {% else %}
+                    <p class="lead">Пожалуйста, для продолжения работы <a href="{% url 'login' %}">авторизируйтесь</a> или <a href="{% url 'signup' %}">зарегистрируйтесь</a></p>
+                {% endif %}
             </div>
         </div>
         {% endblock content %}
